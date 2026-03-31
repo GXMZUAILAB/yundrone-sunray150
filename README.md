@@ -12,7 +12,8 @@
 roscore
 
 # 启动 sunray_communciation_bridge (用于无人机与地面站的数据交互)
-roslaunch sunray_communication_bridge sunray_communication_bridge.launch
+roslaunch sunray_communication_bridge sunray_communication_bridge.launch uav_id:="1" uav_experiment_num:="1" # 真机
+roslaunch sunray_communication_bridge sunray_communication_bridge_sim.launch uav_id:="1" uav_experiment_num:="1" # 仿真
 
 # 启动 px4 仿真 (真机无需执行)
 roslaunch sunray_simulator sunray_sim_1uav.launch
