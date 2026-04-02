@@ -3,7 +3,8 @@
 ## 项目简介
 云纵无人机Sunray150开发项目
 ## 设备依赖
-设备品牌 - 型号：Sunray150 - 三维激光雷达款
+1. 设备品牌 - 型号：Sunray150 - 三维激光雷达款
+2. 设备说明：[硬件整体介绍-云纵科技](https://wiki.yundrone.cn/docs/Sunray150-ying-jian-zheng-ti-jie-shao)
 ## 环境配置
 参考 docs/environment/ 目录下的文件说明部署步骤
 ## 使用方法
