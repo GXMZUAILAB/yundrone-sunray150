@@ -28,11 +28,20 @@ roslaunch sunray_uav_control sunray_control_node.launch
 # 启动键盘控制节点 (真机无需执行)
 roslaunch sunray_uav_control terminal_control.launch
 ```
+## 一键启动脚本使用方法
+```
+#前提:要在docker中安装ROS以及仿真平台
+#将脚本复制到你的用户文件夹
+#赋予执行权限
+chmod +x one-click-start.sh
+#执行启动
+./one-click-start.sh
+```
 ## 维护人员
 | 姓名  | 邮箱                |
 | --- | ----------------- |
 | 冼佳炜 | 3188074406@qq.com |
-| 李相帅 | 2425057190@qq.com |
+| 李帅相 | 2425057190@qq.com |
 
 
 
