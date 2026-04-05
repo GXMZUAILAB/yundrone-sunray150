@@ -1,0 +1,12 @@
+source /root/Sunray/devel/setup.bash
+source /root/sunray_px4/Tools/simulation/gazebo-classic/setup_gazebo.bash /root/sunray_px4 /root/sunray_px4/build/px4_sitl_default
+export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:/root/sunray_px4/Tools/simulation/gazebo-classic/sitl_gazebo-classic
+export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:/root/sunray_px4
+export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/root/Sunray/Simulation/sunray_simulator/models
+export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/root/Sunray/Simulation/sunray_simulator/models/scence_models
+export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/root/Sunray/Simulation/sunray_simulator/models/sensor_models
+export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/root/Sunray/Simulation/sunray_simulator/models/drone_models
+export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/root/Sunray/Simulation/sunray_simulator/models/aws_models
+export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/root/Sunray/Simulation/sunray_simulator/models/ugv_models
+export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/root/Sunray/Simulation/sunray_simulator/texture
+export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/root/Sunray/Simulation/sunray_simulator/worlds
