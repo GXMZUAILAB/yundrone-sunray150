@@ -85,3 +85,110 @@
 |**定高**|姿态 + 高度控制|室内飞行、定高巡检|IMU + 气压计/激光雷达|
 |**定点**|姿态 + 高度 + 水平位置|航点飞行、精准悬停|IMU + 气压计 + GPS/光流|
 |**板外**|外部计算机全权控制|SLAM、避障、编队、自主飞行|外部计算机 + 相应传感器|
+
+---
+# 控制模式 vs PX4模式
+
+这两个模式是**不同层级**的概念，一个是**上层应用控制模式**，一个是**飞控底层飞行模式**。
+
+### 一、概念对比
+
+|对比项|控制模式 (`control_mode`)|PX4模式 (`px4_mode`)|
+|---|---|---|
+|**所属层级**|上层控制架构（Sunray系统）|飞控固件层（PX4）|
+|**定义位置**|`UAVSetup.control_mode`|`UAVSetup.px4_mode`|
+|**作用范围**|决定控制指令的来源|决定飞控的飞行行为|
+|**典型值**|`CMD_CONTROL`, `RC_CONTROL`, `LAND_CONTROL`|`OFFBOARD`, `POSCTL`, `AUTO.LAND`|
+
+---
+### 二、详细说明
+
+#### 1. 控制模式 (`control_mode`)
+
+这是**Sunray上层系统**定义的模式，用于控制指令的来源：
+
+|模式|说明|指令来源|
+|---|---|---|
+|`RC_CONTROL`|遥控器控制模式|遥控器|
+|`CMD_CONTROL`|指令控制模式|ROS程序（`UAVControlCMD`）|
+|`LAND_CONTROL`|降落控制模式|自动降落逻辑|
+|`WITHOUT_CONTROL`|无控制|无|
+|`INIT`|初始化模式|-|
+
+**作用**：决定无人机听从谁的指挥。
+```python
+# 切换到程序控制模式
+setup.control_mode = "CMD_CONTROL"
+```
+#### 2. PX4模式 (`px4_mode`)
+
+这是**PX4飞控固件**定义的模式，决定飞控的飞行行为：
+
+|模式|说明|行为|
+|---|---|---|
+|`OFFBOARD`|外部控制模式|接受外部（如ROS）的位置/速度/姿态指令|
+|`POSCTL`|位置控制模式|遥控器控制位置，飞控自动保持|
+|`ALTCTL`|高度控制模式|遥控器控制水平，飞控保持高度|
+|`STABILIZED`|增稳模式|飞控保持姿态稳定，遥控器直接控制角度|
+|`AUTO.LAND`|自动降落|自动执行降落程序|
+|`AUTO.RTL`|自动返航|自动返回起飞点|
+
+**作用**：决定飞控如何响应控制指令。
+```python
+# 切换到外部控制模式
+setup.px4_mode = "OFFBOARD"
+```
+---
+### 三、两者的关系
+```text
+┌─────────────────────────────────────────────────────────┐
+│                    上层应用 (ROS)                        │
+│  ┌─────────────────────────────────────────────────┐    │
+│  │           控制模式 (control_mode)                │    │
+│  │   CMD_CONTROL  ←── 你的程序在这里                 │    │
+│  └─────────────────────────────────────────────────┘    │
+│                         │                               │
+│                         ▼                               │
+│  ┌─────────────────────────────────────────────────┐    │
+│  │           飞控固件 (PX4)                         │    │
+│  │            PX4模式 (px4_mode)                    │    │
+│  │   OFFBOARD  ←── 必须配合使用                      │    │
+│  └─────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────┘
+```
+---
+### 四、使用时的配合关系
+
+| 场景          | 控制模式           | PX4模式                   | 说明             |
+| ----------- | -------------- | ----------------------- | -------------- |
+| **程序控制飞行**  | `CMD_CONTROL`  | `OFFBOARD`              | ✅ 标准配置         |
+| **遥控器手动飞行** | `RC_CONTROL`   | `POSCTL` / `STABILIZED` | 遥控器控制          |
+| **自动降落**    | `LAND_CONTROL` | `AUTO.LAND`             | 降落时自动切换        |
+| **程序无法控制**  | `CMD_CONTROL`  | `POSCTL`                | ❌ PX4模式不对，指令无效 |
+
+---
+### 五、代码示例
+```python
+import rospy
+from sunray_msgs.msg import UAVSetup
+
+rospy.init_node('mode_demo')
+pub = rospy.Publisher('/uav1/sunray/setup', UAVSetup, queue_size=1)
+rospy.sleep(1)
+
+setup = UAVSetup()
+setup.header.stamp = rospy.Time.now()
+
+# 正确的程序控制配置（两者必须同时设置）
+setup.cmd = UAVSetup.SET_CONTROL_MODE
+setup.control_mode = "CMD_CONTROL"   # 1. 告诉上层：用程序指令
+pub.publish(setup)
+rospy.sleep(0.5)
+
+setup.cmd = UAVSetup.SET_PX4_MODE
+setup.px4_mode = "OFFBOARD"          # 2. 告诉飞控：接受外部指令
+pub.publish(setup)
+
+rospy.loginfo("已切换到程序控制模式 + OFFBOARD模式")
+```
+
