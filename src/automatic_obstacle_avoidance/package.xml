@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>automatic_obstacle_avoidance</name>
+  <version>0.1.0</version>
+  <description>A ROS C++ package built with sunray150 automatic obstacle avoidance</description>
+  <maintainer email="3188074406@qq.com">X_watermelons</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+  <depend>sunray_msgs</depend>
+</package>

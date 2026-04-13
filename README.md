@@ -17,7 +17,7 @@ roslaunch sunray_communication_bridge sunray_communication_bridge.launch uav_id:
 roslaunch sunray_communication_bridge sunray_communication_bridge_sim.launch uav_id:="1" uav_simulation_num:="1" # 仿真
 
 # 启动 px4 仿真 (真机无需执行)
-roslaunch sunray_simulator sunray_sim_1uav.launch
+roslaunch sunray_simulator sunray_sim_1uav.launch vehicle:=sunray150_with_mid360
 
 # 发送外部定位 
 roslaunch sunray_uav_control external_fusion.launch external_source:=2 

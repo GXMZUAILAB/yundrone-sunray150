@@ -1,0 +1,8 @@
+prefix=/home/yundrone/Sunray/yundrone-sunray150/devel
+
+Name: automatic_obstacle_avoidance
+Description: Description of automatic_obstacle_avoidance
+Version: 0.1.0
+Cflags: -I/home/yundrone/Sunray/yundrone-sunray150/src/automatic_obstacle_avoidance/include
+Libs: -L${prefix}/lib -lautomatic_obstacle_avoidance
+Requires: roscpp std_msgs sunray_msgs
