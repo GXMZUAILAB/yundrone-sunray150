@@ -1,0 +1,5 @@
+<launch>
+    <node pkg="automatic_obstacle_avoidance" type="demo1" name="demo1_node" output="screen">
+        <param name="uav_id" value="1"/>
+    </node>
+</launch>
